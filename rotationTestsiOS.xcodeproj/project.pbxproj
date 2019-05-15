@@ -8,20 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		3D015498228B4168009AD527 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D015497228B4168009AD527 /* AppDelegate.swift */; };
-		3D01549A228B4168009AD527 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D015499228B4168009AD527 /* ViewController.swift */; };
+		3D01549A228B4168009AD527 /* RotationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D015499228B4168009AD527 /* RotationViewController.swift */; };
 		3D01549D228B4168009AD527 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D01549B228B4168009AD527 /* Main.storyboard */; };
 		3D01549F228B4169009AD527 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D01549E228B4169009AD527 /* Assets.xcassets */; };
 		3D0154A2228B4169009AD527 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D0154A0228B4169009AD527 /* LaunchScreen.storyboard */; };
+		E26C15C6228C54E200792B16 /* ImageTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26C15C5228C54E200792B16 /* ImageTools.swift */; };
+		E26C15C8228C6A4900792B16 /* TimeTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26C15C7228C6A4900792B16 /* TimeTools.swift */; };
+		E26C15CC228C7BF000792B16 /* CamerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26C15CB228C7BF000792B16 /* CamerViewController.swift */; };
+		E26C15CE228C7C1B00792B16 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26C15CD228C7C1B00792B16 /* CameraController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3D015494228B4168009AD527 /* rotationTestsiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rotationTestsiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D015497228B4168009AD527 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3D015499228B4168009AD527 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3D015499228B4168009AD527 /* RotationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationViewController.swift; sourceTree = "<group>"; };
 		3D01549C228B4168009AD527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3D01549E228B4169009AD527 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D0154A1228B4169009AD527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D0154A3228B4169009AD527 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E26C15C5228C54E200792B16 /* ImageTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTools.swift; sourceTree = "<group>"; };
+		E26C15C7228C6A4900792B16 /* TimeTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTools.swift; sourceTree = "<group>"; };
+		E26C15CB228C7BF000792B16 /* CamerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CamerViewController.swift; sourceTree = "<group>"; };
+		E26C15CD228C7C1B00792B16 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +62,26 @@
 		3D015496228B4168009AD527 /* rotationTestsiOS */ = {
 			isa = PBXGroup;
 			children = (
+				3D015499228B4168009AD527 /* RotationViewController.swift */,
+				E26C15CB228C7BF000792B16 /* CamerViewController.swift */,
+				E26C15C4228C549E00792B16 /* tools */,
 				3D015497228B4168009AD527 /* AppDelegate.swift */,
-				3D015499228B4168009AD527 /* ViewController.swift */,
 				3D01549B228B4168009AD527 /* Main.storyboard */,
 				3D01549E228B4169009AD527 /* Assets.xcassets */,
 				3D0154A0228B4169009AD527 /* LaunchScreen.storyboard */,
 				3D0154A3228B4169009AD527 /* Info.plist */,
 			);
 			path = rotationTestsiOS;
+			sourceTree = "<group>";
+		};
+		E26C15C4228C549E00792B16 /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				E26C15C5228C54E200792B16 /* ImageTools.swift */,
+				E26C15C7228C6A4900792B16 /* TimeTools.swift */,
+				E26C15CD228C7C1B00792B16 /* CameraController.swift */,
+			);
+			path = tools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,7 +155,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D01549A228B4168009AD527 /* ViewController.swift in Sources */,
+				E26C15CE228C7C1B00792B16 /* CameraController.swift in Sources */,
+				3D01549A228B4168009AD527 /* RotationViewController.swift in Sources */,
+				E26C15C6228C54E200792B16 /* ImageTools.swift in Sources */,
+				E26C15CC228C7BF000792B16 /* CamerViewController.swift in Sources */,
+				E26C15C8228C6A4900792B16 /* TimeTools.swift in Sources */,
 				3D015498228B4168009AD527 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
