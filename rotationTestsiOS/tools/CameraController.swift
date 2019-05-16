@@ -22,9 +22,9 @@ class CameraController : NSObject{
     public var sessionVideoQuality = AVCaptureSession.Preset.hd1280x720
     
     //session variables
-    private let session = AVCaptureSession()
+    private var session = AVCaptureSession()
     private var cameraLayer: AVCaptureVideoPreviewLayer! = nil
-    private let videoDataOutput = AVCaptureVideoDataOutput()
+    private var videoDataOutput = AVCaptureVideoDataOutput()
     private let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutput", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
     var bufferSize: CGSize = .zero
     
@@ -57,10 +57,21 @@ class CameraController : NSObject{
         session.startRunning()
     }
     
+    func stopCamera(){
+            session.stopRunning()
+    }
+    
     func setupAVCapture(){
         // 1. Define the capture device we want to use
         guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: cameraPosition) else {
             fatalError("No front video camera available")
+        }
+        
+        //clean up
+        session = AVCaptureSession()
+        videoDataOutput =  AVCaptureVideoDataOutput()
+        if cameraLayer != nil {
+            cameraLayer.removeFromSuperlayer()
         }
         
         session.beginConfiguration()
@@ -89,7 +100,9 @@ class CameraController : NSObject{
         let captureConnection = videoDataOutput.connection(with: .video)
         // Always process the frames
         captureConnection?.isEnabled = true
-        //captureConnection?.videoOrientation = .portrait //// !!!!! Video Orientation set here!!!!!!!
+       // captureConnection?.videoOrientation = getCaptureVideoOrienatation(connection: captureConnection!)//// !!!!! Video Orientation set here!!!!!!!
+        //print("captureConnection.videoOrientation \(captureConnection?.videoOrientation.rawValue)")
+        
         
         //4. Getting Buffer dimensions
         do {
@@ -105,6 +118,8 @@ class CameraController : NSObject{
         session.commitConfiguration()
         cameraLayer = AVCaptureVideoPreviewLayer(session: session)
         cameraLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        //cameraLayer.connection
+        
         rootLayer = cameraView.layer
         cameraLayer.frame = rootLayer.bounds
         rootLayer.addSublayer(cameraLayer)
@@ -114,16 +129,62 @@ class CameraController : NSObject{
         
     }
     
+    
+    func showInCameraPreview(image: CGImage){
+        CATransaction.begin()
+        rootLayer.contents = image
+        CATransaction.commit()
+    }
     func showInPreview(image: CGImage){
+        CATransaction.begin()
+        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
         if (previewLayer != nil){
-            previewLayer.sublayers = nil
-            let layer = CALayer()
-            layer.bounds = CGRect(x:0,y:0, width:  previewLayer.frame.width, height: previewLayer.frame.height)
-            //layer.position = CGPoint(x:layer.bounds.midX,y: layer.bounds.midY)
-            layer.contents = image
-            layer.contentsGravity = .resizeAspect
-            previewLayer.addSublayer(layer)
+            //previewLayer.sublayers = nil
+//            let layer = CALayer()
+//            layer.bounds = CGRect(x:0,y:0, width:  previewLayer.frame.width, height: previewLayer.frame.height)
+//            //layer.position = CGPoint(x:layer.bounds.midX,y: layer.bounds.midY)
+//            layer.contents = image
+//            layer.contentsGravity = .resizeAspect
+//            previewLayer.addSublayer(layer)
+            previewLayer.contents = image
         }
+        CATransaction.commit()
+    }
+    
+    func getCaptureVideoOrienatation(connection: AVCaptureConnection) -> AVCaptureVideoOrientation{
+        let currentDevice: UIDevice = UIDevice.current
+        let orientation: UIDeviceOrientation = currentDevice.orientation
+        
+        print("orientation \(orientation.rawValue)")
+        //return .portrait
+        switch (orientation) {
+        case .portrait: return .portrait
+            break
+        case .landscapeRight: return .landscapeLeft
+            break
+        case .landscapeLeft: return .landscapeRight
+            break
+        case .portraitUpsideDown: return  .portraitUpsideDown
+            break
+        default: return .portrait
+            break
+        }
+    }
+    func printDeviceOrientation(){
+        let currentDevice: UIDevice = UIDevice.current
+        let orientation: UIDeviceOrientation = currentDevice.orientation
+        
+        print("orientation \(orientation.rawValue)")
+    }
+    
+    func rotateViewBasedOnDeviceOrientation(view: UIView){
+        let orientation = UIDevice.current.orientation
+        if orientation == .landscapeRight{
+            view.transform = ImageTools.rotateLeft()
+        }
+        if orientation == .landscapeLeft{
+            view.transform = ImageTools.rotateRight()        }
+        return
     }
 }
 // MARK: - Capturing video output and feeding the Vision pipline
@@ -140,14 +201,17 @@ extension CameraController: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { //CMSSampleBuffer
             return
         }
+       // printDeviceOrientation()
         let ciBuffer = CIImage(cvImageBuffer: pixelBuffer)
-        let bufferHeight = CVPixelBufferGetWidth(pixelBuffer)
-        let bufferWidth = CVPixelBufferGetHeight(pixelBuffer)
-        print("bixelBufer WxH: ", bufferWidth, bufferHeight," bufferSize WxH: ")//, bufferSize.width, bufferSize.height)
+        let  bufferWidth = CVPixelBufferGetWidth(pixelBuffer)
+        let  bufferHeight = CVPixelBufferGetHeight(pixelBuffer)
+       // print("bixelBufer WxH: ", bufferWidth, bufferHeight," bufferSize WxH: ")//, bufferSize.width, bufferSize.height)
         
+        let cgImage = ImageTools.convertCIImageToCGImage(ciImage: ciBuffer)!
         if (showVideoFeedInPreview){
-            showInPreview(image: ImageTools.convertCIImageToCGImage(ciImage: ciBuffer)!)
+            showInPreview(image: cgImage)
         }
+        //showInCameraPreview(image: cgImage)
 //        //let exifOrientation = exifOrientationFromDeviceOrientation()
 //        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: orientationVNImageRequestHandler(), options: [:])
 //
